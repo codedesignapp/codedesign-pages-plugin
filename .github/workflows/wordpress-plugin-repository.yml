@@ -66,6 +66,22 @@ jobs:
           zip -r codedesign-wp-plugin-updater-latest.zip codedesign-plugin -x "*node_modules*/*" -x "*.git*"
           rm -rf codedesign-plugin
 
+      - name: Prepare WordPress.org repository version
+        run: |
+          # Create a clean directory for WordPress.org plugin repository
+          mkdir -p codedesign-pages-plugin
+          shopt -s extglob
+          cp -r !(codedesign-pages-plugin|codedesign-wp-plugin-installer-latest.zip|codedesign-wp-plugin-updater-latest.zip) codedesign-pages-plugin/
+          # Remove the plugin-update-checker-5.3 folder as it's not needed for WordPress.org
+          rm -rf codedesign-pages-plugin/plugin-update-checker-5.3
+          # Remove other unnecessary files for WordPress.org
+          rm -rf codedesign-pages-plugin/.prettierrc
+          rm -rf codedesign-pages-plugin/.git*
+          rm -rf codedesign-pages-plugin/node_modules
+          # Create the WordPress.org ready zip file
+          zip -r codedesign-pages-plugin.zip codedesign-pages-plugin
+          rm -rf codedesign-pages-plugin
+
       - name: Create update JSON file
         run: |
           JSON_FILE=plugin-update.json
@@ -91,7 +107,8 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            codedesign-wp-plugin-installer-latest.zip
-            codedesign-wp-plugin-updater-latest.zip
+            # codedesign-wp-plugin-installer-latest.zip
+            # codedesign-wp-plugin-updater-latest.zip
+            codedesign-pages-plugin.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
