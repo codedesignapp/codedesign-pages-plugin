@@ -54,11 +54,15 @@ jobs:
         run: |
           zip -r codedesign-wp-plugin-installer-latest.zip . -x "*node_modules*/*" -x "*.git*"
 
-      - name: Archive the entire plugin directory for updater
+      - name: Archive the plugin directory without plugin-update-checker for updater
         run: |
           mkdir codedesign-plugin
           shopt -s extglob
           cp -r !(codedesign-plugin|codedesign-wp-plugin-installer-latest.zip) codedesign-plugin/
+          # Remove the plugin-update-checker-5.3 folder from the updater version
+          rm -rf codedesign-plugin/plugin-update-checker-5.3
+          # remove .prettierrc file from the updater version
+          rm -rf codedesign-plugin/.prettierrc
           zip -r codedesign-wp-plugin-updater-latest.zip codedesign-plugin -x "*node_modules*/*" -x "*.git*"
           rm -rf codedesign-plugin
 
