@@ -77,7 +77,7 @@ jobs:
           # Remove other unnecessary files for WordPress.org
           rm -rf codedesign-pages-plugin/.prettierrc
           rm -rf codedesign-pages-plugin/.git*
-          rm -rf codedesign-pages-plugin/node_modules
+          rm -rf codedesign-pages-plugin/plugin-settings/node_modules
           # Create the WordPress.org ready zip file
           zip -r codedesign-pages-plugin.zip codedesign-pages-plugin
           rm -rf codedesign-pages-plugin
