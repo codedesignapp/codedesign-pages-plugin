@@ -1,15 +1,12 @@
 <?php
 /**
  * Plugin Name: CodeDesign Pages
- * Plugin URI: https://codedesign.ai
  * Description: Brings the power of CodeDesign.ai to your WordPress site.
  * Version: 1.3.69
  * Author: CodeDesign.ai
  * Author URI: https://codedesign.ai
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: codedesign
- * Domain Path: /languages
  * Requires PHP: 7.4
  * Requires at least: 5.0
  * Tested up to: 6.8

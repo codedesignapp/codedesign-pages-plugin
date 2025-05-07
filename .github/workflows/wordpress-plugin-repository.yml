@@ -27,21 +27,13 @@ jobs:
 
       - name: Increment plugin version
         run: |
-          # Extract current version more robustly from codedesign-connector.php
-          CURRENT_VERSION=$(grep -oP 'Version: \\K[0-9]+\\.[0-9]+\\.[0-9]+' codedesign-connector.php | tr -d '[:space:]')
-          if [ -z "$CURRENT_VERSION" ]; then
-            echo "Error: Could not extract current version from codedesign-connector.php"
-            exit 1
-          fi
-          echo "Current Version: $CURRENT_VERSION"
-
+          CURRENT_VERSION=$(grep -oP "Version: \K(.*)" codedesign-connector.php)
           IFS='.' read -ra ADDR <<< "$CURRENT_VERSION"
           PATCH_VERSION=$((ADDR[2]+1))
           NEW_VERSION="${ADDR[0]}.${ADDR[1]}.$PATCH_VERSION"
           echo "New Version: $NEW_VERSION"
-
-          # Escape dots in CURRENT_VERSION for sed pattern matching (e.g., 1.3.69 becomes 1\\.3\\.69)
-          CURRENT_VERSION_SED_ESCAPED=$(echo "$CURRENT_VERSION" | sed 's/\\./\\\\./g')
+          sed -i "s/$CURRENT_VERSION/$NEW_VERSION/" codedesign-connector.php
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
           # Update version in codedesign-connector.php
           # Matches " * Version: X.Y.Z"
