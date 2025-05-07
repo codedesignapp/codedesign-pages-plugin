@@ -27,12 +27,45 @@ jobs:
 
       - name: Increment plugin version
         run: |
-          CURRENT_VERSION=$(grep -oP "Version: \K(.*)" codedesign-connector.php)
+          # Extract current version more robustly from codedesign-connector.php
+          CURRENT_VERSION=$(grep -oP 'Version: \\K[0-9]+\\.[0-9]+\\.[0-9]+' codedesign-connector.php | tr -d '[:space:]')
+          if [ -z "$CURRENT_VERSION" ]; then
+            echo "Error: Could not extract current version from codedesign-connector.php"
+            exit 1
+          fi
+          echo "Current Version: $CURRENT_VERSION"
+
           IFS='.' read -ra ADDR <<< "$CURRENT_VERSION"
           PATCH_VERSION=$((ADDR[2]+1))
           NEW_VERSION="${ADDR[0]}.${ADDR[1]}.$PATCH_VERSION"
           echo "New Version: $NEW_VERSION"
-          sed -i "s/$CURRENT_VERSION/$NEW_VERSION/" codedesign-connector.php
+
+          # Escape dots in CURRENT_VERSION for sed pattern matching (e.g., 1.3.69 becomes 1\\.3\\.69)
+          CURRENT_VERSION_SED_ESCAPED=$(echo "$CURRENT_VERSION" | sed 's/\\./\\\\./g')
+
+          # Update version in codedesign-connector.php
+          # Matches " * Version: X.Y.Z"
+          sed -i "s/\\( \\* Version: \\)$CURRENT_VERSION_SED_ESCAPED/\\1$NEW_VERSION/" codedesign-connector.php
+          # Verify change in codedesign-connector.php
+          if ! grep -q " \\* Version: $NEW_VERSION" codedesign-connector.php; then
+            echo "Error: Failed to update version in codedesign-connector.php to $NEW_VERSION"
+            echo "Current content of Version line:"
+            grep " \\* Version:" codedesign-connector.php
+            exit 1
+          fi
+
+          # Update version in readme.txt
+          # Matches "Stable tag: X.Y.Z"
+          sed -i "s/\\(Stable tag: \\)$CURRENT_VERSION_SED_ESCAPED/\\1$NEW_VERSION/" readme.txt
+          # Verify change in readme.txt
+          if ! grep -q "Stable tag: $NEW_VERSION" readme.txt; then
+            echo "Error: Failed to update version in readme.txt to $NEW_VERSION"
+            echo "Current content of Stable tag line:"
+            grep "Stable tag:" readme.txt
+            exit 1
+          fi
+
+          echo "Successfully updated versions to $NEW_VERSION in codedesign-connector.php and readme.txt"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
       - name: Commit built assets
@@ -76,6 +109,7 @@ jobs:
           rm -rf codedesign-pages-plugin/plugin-update-checker-5.3
           # Remove other unnecessary files for WordPress.org
           rm -rf codedesign-pages-plugin/.prettierrc
+          rm -rf codedesign-pages-plugin/plugin-settings/.gitignore
           rm -rf codedesign-pages-plugin/.git*
           rm -rf codedesign-pages-plugin/plugin-settings/node_modules
           # Create the WordPress.org ready zip file

@@ -1,11 +1,13 @@
-=== CodeDesign.ai Pages ===
-Contributors: codedesignai
-Tags: nocode, ai website builder
+=== CodeDesign Pages ===
+Contributors: codedesign.ai
+Donate link: https://codedesign.ai
+Tags: codedesign, page builder, ai website builder, wordpress, website builder
 Requires at least: 5.0
-Tested up to: 6.6
-Stable tag: 1.3.68
+Tested up to: 6.8
+Requires PHP: 7.4
+Stable tag: 1.3.69
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Brings the power of CodeDesign.ai to WordPress, helping you create beautiful, responsive designs with ease.
 
