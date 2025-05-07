@@ -2,7 +2,7 @@
 /**
  * Plugin Name: CodeDesign Pages
  * Description: Brings the power of CodeDesign.ai to your WordPress site.
- * Version: 1.3.69
+ * Version: 1.3.701.3.70
  * Author: CodeDesign.ai
  * Author URI: https://codedesign.ai
  * License: GPLv2 or later

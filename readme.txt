@@ -5,7 +5,7 @@ Tags: codedesign, page builder, ai website builder, wordpress, website builder
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.3.69
+Stable tag: 1.3.701.3.69
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
